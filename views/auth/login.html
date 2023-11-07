@@ -1,0 +1,31 @@
+{{template "header"}}
+<main class="mx-auto">
+   <form method="POST" class="flex  flex-col md:w-[500px] mx-auto p-4 gap-4 register-form" action="">
+        <!-- Form Header -->
+        <div>
+         <h1 class="text-2xl font-extrabold my-2">Welcome back 👋 </h1>
+         <p>Join us now to engage, discuss, and discover a world of diverse perspectives.</p>
+      </div>
+      <input class="border-2 p-3 bg-[#262d34] bg-[#1e252b] border-gray-700" type="email" placeholder="Email" name="email">
+      <small class="text-red-500 email-error error-message"></small>
+      <div class="relative w-full">
+         <small  class="cursor-pointer absolute top-4 right-4 show-password">
+            <img class="w-6 h-6" src="/static/assets/eye.svg" alt="Not found">
+         </small>
+         <input class="border-2 p-3 bg-[#262d34] bg-[#1e252b] border-gray-700 w-full" type="password" placeholder="Password" name="password">
+         <small id="error-4" class="text-red-500 password-error error-message"></small>
+      </div>
+      {{range .Errors}}
+         <small class="text-red-500 text-[12px]">{{.}}</small>
+      {{end}}
+      <input class="bg-indigo-600 p-3 text-white cursor-pointer" type="submit" value="Login">
+      <button class="border-orange-500 border-2 text-orange-500 flex gap-2 items-center justify-center google-auth p-3">
+         <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" width="64" height="64"><defs><path id="A" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/></defs><clipPath id="B"><use xlink:href="#A"/></clipPath><g transform="matrix(.727273 0 0 .727273 -.954545 -1.45455)"><path d="M0 37V11l17 13z" clip-path="url(#B)" fill="#fbbc05"/><path d="M0 11l17 13 7-6.1L48 14V0H0z" clip-path="url(#B)" fill="#ea4335"/><path d="M0 37l30-23 7.9 1L48 0v48H0z" clip-path="url(#B)" fill="#34a853"/><path d="M48 48L17 24l-4-3 35-10z" clip-path="url(#B)" fill="#4285f4"/></g></svg>
+            Sign in with Google
+      </button>
+      <small class="text-center">Don't have an account? <a href="/auth/register" class="hover:underline text-orange-500">Sign up</a></small>
+   </form>
+   <script src="/static/javascript/forms/form-validation.js"></script>
+   <script src="/static/javascript/forms/show-hide-password.js"></script>
+</main>
+{{template "footer"}}

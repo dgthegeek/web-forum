@@ -1,0 +1,13 @@
+{{template "header"}}
+<main class="md:w-[500px] h-screen flex gap-4 flex-col justify-center items-center mx-auto">
+    <div class="text-center flex flex-col gap-4 items-center justify-center h-screen">
+        <div>
+          <h1 class="text-xl font-bold mb-2">Lost your way ?</h1>
+          <p class="w-[75%] mx-auto">{{.Message}}</p>
+        </div>
+        <div>
+          <a class="bg-orange-600  flex gap-2 items-center justify-center px-3 py-2" href="/posts">Back to your feed</a>
+        </div>
+      </div>
+</main>
+{{template "footer"}}

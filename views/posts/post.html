@@ -1,0 +1,210 @@
+{{template "header"}}
+
+    <!-- Timeline -->
+    <section class="lg:w-[calc(100vw-700px)] mx-auto">
+            <!-- Error block -->
+      {{if .HasError}}
+      <div class="bg-red-500/30 mb-6 text-red-500 px-4 py-1">
+        {{range .Errors}}
+          <small class="flex items-center gap-2 rounded-sm my-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+            {{.}}
+          </small>
+        {{end}}
+      </div>
+      {{end}}
+        <!-- Post -->
+      {{if .Data}}
+        <article class="space-y-4 rounded-sm bg-[#262d34] p-4">
+        <!-- Author Infos -->
+        <div class="flex items-center justify-between gap-2">
+            <a href="/users/{{.Data.UserID}}" class="relative w-fit flex gap-2 items-center">
+                <img
+                    class="border-2 shadow-2xl h-10 w-10 rounded-full"
+                    src="{{.Data.Avatar}}"
+                    alt="avatar"
+                />
+                <div class="flex flex-col">
+                    <span class="text-[14px] text-indigo-600 font-semibold full-name hover:underline"  >
+                      {{.Data.FirstName}} {{.Data.LastName}}
+                    </span>
+                    <div class="text-[14px] flex gap-2 items-center">
+                        <small class="text-gray-500 username">@{{.Data.Username}}</small>
+                        •
+                        <small class="text-orange-500 createdAt">{{.Data.CreatedAt}}</small>
+                    </div>
+                </div>
+            </a>
+            {{if isAuthentificated}}
+            <div class="flex gap-4">
+              <form method="post" enctype="multipart/form-data">
+
+                <input type="hidden" name="postID" value="{{ .Data.ID }}">
+                <input type="hidden" name="post-type" value="like">
+                <button type="submit" class="hover:bg-indigo-600/20 rounded-full">
+                    <img class="w-[30px] p-2" src="/static/assets/thumb-down.png" alt="Like">
+                </button>
+              </form>
+
+              <form method="post" enctype="multipart/form-data">
+
+                <input type="hidden" name="postID" value="{{ .Data.ID }}">
+                <input type="hidden" name="post-type" value="dislike">
+                <button type="submit" class="bg-indigo-600 rounded-full overflow-hidden">
+                    <img class="w-[30px] p-2" src="/static/assets/thumb-up.png" alt="Dislike">
+                </button>
+              </form>
+            </div>
+            {{end}}
+          </div>
+
+
+        <!-- Topics -->
+        <div class="flex items-center gap-4 flex-wrap">
+          {{range .Data.Categories}}
+          <div class="text-[14px] bg-orange-500/30  text-orange-500 w-fit px-3 py-1 rounded-sm my-4 capitalize">
+              {{.Category}}
+          </div>
+          {{end}}
+        </div>
+        <!-- Image / Content -->
+        <div class="flex md:flex-row flex-col gap-4">
+            {{ if .Data.Image }}
+            <img class="w-full md:w-[200px] rounded-md h-[170px] object-cover" src="/static/uploads/{{.Data.Image}}" alt="" />
+            {{end}}
+            <div class="space-y-4">
+                <h1 class="text-md md:text-xl font-semibold">
+                    {{.Data.Title}}
+                </h1>
+                <div class="content">
+                    <p class="content-text max-h-[70px] overflow-hidden">
+                        {{ .Data.Content }}
+                    </p>
+                    <button class="content-view-more text-blue-500 hidden">
+                        View more
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- comment / like -->
+        <div class="w-full flex justify-end text-sm gap-6 p-2">
+            <div class="flex items-center justify-center gap-2">
+                <span class="number-of-action">{{ .Data.CommentsCounts }}</span>
+                <span>Comments</span>
+            </div>
+            <div class="flex items-center justify-center gap-6">
+                <div class="flex items-center gap-2">
+                  <span class="number-of-action">{{ .Data.LikesCount }}</span>
+                  <span>Likes</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="number-of-action">{{ .Data.DisLikesCount }}</span>
+                  <span>Dislikes</span>
+              </div>
+            </div>
+        </div>
+        <!-- Post a comment -->
+        <div class="flex flex-col my-4 border-t-2 border-white/5">
+            <div class="flex items-center mt-6 justify-between">
+              <h1 class="text-xl font-bold">Comments</h1>
+            </div>
+            {{if isAuthentificated}}
+            <form method="post" class="relative w-full my-6" enctype="multipart/form-data">
+              <input type="hidden" name="post-type" value="comment">
+              <input type="hidden" name="postID" value="{{ .Data.ID }}">
+              <div class="flex gap-2">
+                <img class="user-avatar border-2  shadow-2xl h-8 w-8 rounded-full" src="{{User.Avatar}}" alt="avatar">
+                <div class="relative w-full">
+                  <input class="p-2 text-[14px] text-gray-500 w-full bg-[#1e252b] rounded-sm focus:outline-none" type="text" placeholder="Write a comment" name="comment">
+                  <button type="submit"  class="cursor-pointer absolute p-1 mb-2 top-2 rounded-md right-4">
+                    <img class="w-4 h-4" src="/static/assets/paper-airline.svg" alt="Not found">
+                  </button>
+                </div>
+              </div>
+            </form>
+            {{else}}
+              <div  class="text-gray-600 text-xs my-4">You must be <a href="/auth/login" class="text-orange-500 hover:underline">logged in</a> to post a comment</div>
+            {{end}}
+        </div>
+        <!-- Displaying Comments -->
+        <div id="commentSection" class="space-y-8">
+            {{ range .Data.Comments}}
+            <div>
+                <!-- Author Infos -->
+                <div class="bg-[#1e252b]/50 space-y-2 rounded-md px-2 py-3 items-center gap-2">
+                <div class="flex justify-between">
+                    <a class="relative w-fit flex items-center gap-2" href="/users/{{ .AuthorID }}">
+                      <img class="border-2 shadow-2xl h-6 w-6 rounded-full" src="{{.Avatar}}" alt="avatar">
+                      <div class="flex flex-col">
+                        <div class="text-[12px]">
+                          <span class="text-indigo-600 font-semibold full-name hover:underline">{{.FirstName}} {{.LastName}}</span>
+                          <small class="text-orange-500 createdAt">{{.CreationDate}}</small>
+                        </div>
+                        <small class="text-gray-500 username">@{{.UserName}}</small>
+                      </div>
+                    </a>
+                    {{if isAuthentificated}}
+                    <div class="flex gap-4">
+                      <form method="post" enctype="multipart/form-data">
+
+                        <input type="hidden" name="commentID" value="{{ .ID }}">
+                        <input type="hidden" name="post-type" value="like">
+                        <button type="submit" class="hover:bg-indigo-600/20 rounded-full">
+                            <img class="w-[30px] p-2" src="/static/assets/thumb-down.png" alt="Like">
+                        </button>
+                      </form>
+
+                      <form method="post" enctype="multipart/form-data">
+
+                        <input type="hidden" name="commentID" value="{{ .ID }}">
+                        <input type="hidden" name="post-type" value="dislike">
+                        <button type="submit" class="bg-indigo-600 rounded-full overflow-hidden">
+                            <img class="w-[30px] p-2" src="/static/assets/thumb-up.png" alt="Dislike">
+                        </button>
+                      </form>
+                    </div>
+                    {{end}}
+                </div>
+                  <div class="content p-2">
+                      <p class="content-text max-h-[70px] overflow-hidden">
+                          {{ .Content }}
+                      </p>
+                      <button class="content-view-more text-blue-500 hidden">
+                          View more
+                      </button>
+                  </div>
+                <div class="w-full flex justify-end text-sm gap-6 p-2">
+                    <div class="flex items-center justify-center gap-6">
+                        <div class="flex items-center gap-2">
+                          <span class="number-of-action">{{ .LikesCount }}</span>
+                          <span>Likes</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                          <span class="number-of-action">{{ .DisLikesCount }}</span>
+                          <span>Dislikes</span>
+                      </div>
+                    </div>
+                </div>
+                </div>
+              </div>
+            {{ end }}
+        </div>
+        </article>
+      {{else}}
+            <div class="text-center flex flex-col gap-4 items-center justify-center h-screen">
+              <div>
+                <h1 class="text-xl font-bold mb-2">Lost your way ?</h1>
+                <p>Sorry we can't find this post.<br> You'll find lots to explore on your feed</p>
+              </div>
+              <div>
+                <a class="bg-orange-600  flex gap-2 items-center justify-center px-3 py-2" href="/posts">Back to your feed</a>
+              </div>
+            </div>
+      {{end}}
+    </section>
+
+<script src="/static/javascript/format.js"></script>
+<script src="/static/javascript/post/time-formatter.js"></script>
+{{template "footer"}}

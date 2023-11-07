@@ -1,0 +1,333 @@
+{{ define "header"}}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>OpinionShare | Where Ideas Take Flight</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="stylesheet" href="/static/index.css" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        <style>
+            * {
+                font-family: 'Work Sans', sans-serif;
+            }
+            body {
+                background-color: #1e252b;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+         <!-- Modal -->
+ <div class="bg-[#0000007d] overflow-scroll z-50 modal-wrapper hidden fixed w-screen h-screen top-0">
+
+    <!-- Modal Content w-->
+    <div class="flex justify-center items-center">
+      <form class="flex relative gap-6 bg-[#1e252b] text-white mt-16  mx-auto p-4 gap-y-4 register-form"  method="POST" enctype="multipart/form-data" >
+        <input type="hidden" name="post-type" value="post">
+        <!-- Close the modal -->
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 right-4 hover:text-red-500 cursor-pointer modal-closer absolute">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+
+       <!-- Image Preview -->
+        <div class="relative hidden uploaded-image-placeholder h-auto">
+          <small class="font-semibold mb-4">Image preview</small>
+          <img class="uploaded-img shadow-md md:max-h-[200px] w-full order-2 object-cover shadow-sm"  src="" alt="Post-image">
+         <!--  CTA buttons -->
+          <div class="flex gap-2 items-center my-4">
+               <!-- Delete image -->
+          <div class="flex w-fit p-1 bg-red-100 items-center delete-uploaded-image text-red-600 cursor-pointer gap-2">
+            <small>Delete</small>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+            </svg>
+         </div>
+         <!-- Change Image -->
+         <div class="flex items-center w-fit p-1 bg-orange-100 text-orange-500 cursor-pointer my-2 gap-2">
+          <small class="text-xs change-uploaded-image" for="post-image">Change</small>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+          </svg>
+         </div>
+         </div>
+        </div>
+        <section class="flex flex-col pt-4 gap-y-4">
+
+      <!-- Form Header -->
+          <div>
+            <h1 class="text-2xl font-extrabold my-2">Share your thoughts..</h1>
+        </div>
+     <!-- Post title -->
+        <div class="w-full">
+            <input autocomplete="off" class="border-[#262d34] border-2 p-3 w-full bg-[#1e252b]" type="text" placeholder="Title" name="title">
+            <small id="error-1" class="text-red-500 title-error error-message"></small>
+        </div>
+     <!-- Post description -->
+        <div class="w-full">
+          <textarea placeholder="Share your thoughts..."  class="border-[#262d34] border-2 p-3 w-full bg-[#1e252b]" name="description" id="" cols="30" rows="4"></textarea>
+            <small id="error-3" class="text-red-500 description-error error-message"></small>
+        </div>
+        <!--  Post image -->
+          <div class="w-full flex flex-col">
+              <label for="post-image" class="bg-indigo-600 image-btn-uploader cursor-pointer text-white w-fit p-1 text-sm flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                </svg>
+                Add photo
+              </label>
+              <input id="post-image" class="border-2 p-3 w-full hidden post-img" type="file" accept="image/*" name="image">
+              <small id="error-2" class="text-red-500 image-error error-message"></small>
+        </div>
+       <!-- Uploaded image  -->
+       <div class="relative hidden uploaded-image-placeholder h-auto w-full">
+         <div class="layer bg-indigo-600 bg-opacity-40 absolute w-full h-full text-white p-1">
+            <div class="flex  items-center delete-uploaded-image text-red-600 cursor-pointer gap-2">
+             <small>Delete</small>
+             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+               <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+             </svg>
+            </div>
+            <div class="flex items-center text-orange-500 cursor-pointer my-2 gap-2">
+             <label class="text-xs" for="post-image">Change</label>
+             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+               <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+             </svg>
+
+            </div>
+         </div>
+         <img class="uploaded-img md:max-h-[200px] w-full order-2 object-cover shadow-sm"  src="" alt="Post-image">
+       </div>
+     <!-- Post topic -->
+        <div class="flex w-[400px] flex-wrap gap-4">
+            {{if Category}}
+                {{range $i, $elem := Category}}
+                    <div class="bg-indigo-600/10 text-indigo-600">
+                        <input class="topic-checkboxes" type="checkbox" id="{{$elem.Category}}" name="category" value="{{$elem.Id}}" {{if not $i}}checked{{end}}>
+                        <label class="text-[12px] p-1" for="{{$elem.Category}}">{{.Category}}</label><br>
+                    </div>
+                {{end}}
+            {{end}}
+        </div>
+        <small class="message text-red-500"></small>
+        <!-- Submit Button -->
+        <input class="bg-indigo-600 text-white p-3 cursor-pointer" type="submit" value="Publish">
+    </section>
+
+     </form>
+    </div>
+  </div>
+        <main class="flex bg-[#1e252b] text-white pt-8 px-4 md:px-8 gap-6">
+            {{if shouldHaveAsides}}
+                {{ if isAuthentificated }}
+                    <button class="bg-indigo-600 z-50 text-white rounded-full fixed bottom-14 lg:bottom-4 right-8 p-2 modal-toggler">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                    </button>
+                {{ end }}
+                <!-- Left Aside -->
+                <aside class="space-y-10 w-[300px] left-4 h-full fixed hidden lg:block">
+                    <!-- <small class="absolute left-8 bottom-12 text-gray-500 ">Made with ❤️ by Aziz & Moussa </small> -->
+                    <h1>Logo</h1>
+                    <section class="bg-[#262d34] rounded-sm shadow-sm flex-col gap-4 p-4  hidden md:flex">
+                    {{ if isAuthentificated }}
+                    <div class="flex items-center gap-2">
+                        <div class="relative">
+                            <img class="user-avatar border-2  shadow-2xl h-10 w-10 rounded-full" src="{{User.Avatar}}" alt="avatar">
+                            <div class="green-dot border-2 border-white w-3 h-3 bg-green-500 rounded-full absolute bottom-0 right-0"></div>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-[14px] full-name">{{User.FirstName}} {{User.LastName}}</span>
+                            <small class="text-gray-500 username">@{{User.Username}}</small>
+                        </div>
+                    </div>
+                    <a class="flex gap-2" href="/users/{{User.ID}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        Profile
+                    </a>
+                    <a class="flex gap-2" href="/posts">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                        </svg>
+                        Posts
+                    </a>
+                    <form method="post" class="text-red-500 flex gap-2 logout" enctype="multipart/form-data">
+                        <input type="hidden" name="post-type" value="log-out">
+                        <button type="submit" id="logout" class="flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                            </svg>
+                            Logout
+                        </button>
+                    </form>
+                    <button class="bg-indigo-600 modal-toggler cursor-pointer text-white flex gap-2 items-center justify-center px-3 py-2 rounded-sm">
+                        Publish
+                    </button>
+                    {{ else }}
+                    <h1 class="text-xl font-bold">Please Sign in</h1>
+                    <small>to benefict to the all features of our application</small>
+                    <div class="flex items-center gap-2">
+                        <a href="/auth/login">
+                            <button class="bg-indigo-600   text-white flex gap-2 items-center justify-center px-3 py-2 rounded-sm">
+                            Sign in
+                        </button>
+                        </a>
+                        or
+                        <a class="underline text-sm " href="/auth/register">Join us</a>
+                    </div>
+                    {{end}}
+
+                    </section>
+
+                </aside>
+                <!-- For small device only -->
+                <!-- Sticky instagram-like navbar -->
+                {{ if isAuthentificated }}
+                <div class="flex fixed z-50 lg:hidden block -bottom-6 p-3 bg-[#1e252b]  left-0 w-full justify-between mb-6 gap-5">
+                    <a class="flex gap-2" href="/users/{{User.ID}}">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                    </a>
+                    <a class="flex gap-2" href="/posts">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                      </svg>
+                  </a>
+                  <form  method="post" class="text-red-500 flex logout gap-2" enctype="multipart/form-data">
+                    <input type="hidden" name="post-type" value="log-out">
+                    <button type="submit" class="flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                        </svg>
+                    </button>
+                </form>
+                </div>
+                {{else}}
+                    <div class="fixed bottom-0 lg:hidden block w-full p-3 z-50 text-[12px] bg-[#1e252b] left-0">
+                        <span>Please <a href="auth/login" class="text-orange-500 hover:underline">sign in</a></span>
+                        <span>to benefit to the all features of our application or  <a href="auth/register" class="text-orange-500 hover:underline">join us</a></span>
+                    </div>
+                {{end}}
+                <!-- Sticky Header -->
+                <div class="fixed lg:hidden block top-0 w-full p-3 z-50 text-[12px] bg-[#1e252b] left-0">
+                    <div  class="flex items-center justify-between">
+                        <h1>Logo</h1>
+                        <img  class="w-6 cursor-pointer topic-section-toggler" src="/static/assets/menu-close.svg" alt="menu">
+                    </div>
+                    <form action="/posts" class="flex mt-4 topics items-center flex-wrap gap-y-6 gap-x-2">
+                        {{range $i, $elem := Category}}
+                            <button class="bg-indigo-600/10 text-indigo-600">
+                                <input hidden  class="checkboxes" type="radio" id="{{$elem.Category}}_topics_filters_small_devices" name="topic" value="{{.Category}}" {{if not $i}}checked{{end}}>
+                                <label class="text-[14px] bg-orange-500/30  text-orange-500 w-fit px-3 py-1 rounded-sm my-4 capitalize" for="{{$elem.Category}}_topics_filters_small_devices">{{.Category}}</label><br>
+                            </button>
+                        {{end}}
+                    </form>
+                </div>
+                <!-- Right Aside -->
+                <aside class="space-y-10 right-4 w-[300px] fixed hidden lg:block">
+                    <form method="get" class="relative w-full">
+                        <input
+                            class="p-2 w-full bg-[#262d34] rounded-sm"
+                            autocomplete="of"
+                            type="text"
+                            placeholder="Search a topic, user, post...."
+                            name="search-query"
+                        />
+                        <button
+                            type="submit"
+                            class="cursor-pointer disabled:opacity-60 absolute p-1 mb-2 top-2 rounded-sm right-4"
+                        >
+                            <img
+                                class="w-4 h-4"
+                                src="/static/assets/search.svg"
+                                alt="Not found"
+                            />
+                        </button>
+                    </form>
+                    <section
+                        class="bg-[#262d34] rounded-sm shadow-sm flex-col gap-4 p-4 hidden md:flex"
+                    >
+                        <form class="flex items-center gap-2">
+                            <input type="hidden" name="order" value="newest" />
+                            <img class="h-8" src="/static/assets/new.svg" alt="" />
+                            <button
+                                type="submit"
+                                class="flex flex-col text-left hover:text-orange-500"
+                            >
+                                <span class="font-semibold">Newest and Recent</span>
+                                <small>Find the latest update</small>
+                            </button>
+                        </form>
+                        <form class="flex items-center gap-2 hover:text-orange-500">
+                            <input type="hidden" name="order" value="most_liked" />
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="w-6 h-6"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z"
+                                />
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z"
+                                />
+                            </svg>
+
+                            <button type="submit" class="flex flex-col text-left">
+                                <span class="font-semibold">Most Popular</span>
+                                <small>Find the most liked post</small>
+                            </button>
+                        </form>
+                    </section>
+                    <section
+                        class="bg-[#262d34] rounded-sm shadow-sm flex-col gap-4 p-4 hidden md:flex"
+                    >
+                        <h2 class="text-xl font-bold">Popular Topics</h2>
+                        <form action="/posts" class="flex items-center flex-wrap gap-y-6 gap-x-2">
+                            {{range $i, $elem := Category}}
+                                <button class="bg-indigo-600/10 text-indigo-600">
+                                    <input hidden  class="checkboxes" type="radio" id="{{$elem.Category}}_topics_filters" name="topic" value="{{.Category}}" {{if not $i}}checked{{end}}>
+                                    <label class="text-[14px] bg-orange-500/30  text-orange-500 w-fit px-3 py-1 rounded-sm my-4 capitalize" for="{{$elem.Category}}_topics_filters">{{.Category}}</label><br>
+                                </button>
+                            {{end}}
+                        </form>
+                    </section>
+                </aside>
+                {{end}}
+            {{end}}
+            {{ define "footer"}}
+        </main>
+        <script src="/static/javascript/modal.js"></script>
+        <script src="/static/javascript/forms/new-post.js"></script>
+        <script src="/static/javascript/logout.js"></script>
+        <script>
+            let status = "close"
+            document.querySelector(".topic-section-toggler").addEventListener("click", (e)=>{
+                status = status === "open" ? "close" : "open";
+               e.target.src = `/static/assets/menu-${status}.svg`
+
+               document.querySelector(".topics").classList.toggle("hidden")
+            })
+        </script>
+         <!-- Prevent form resubmission on page reload -->
+        <script>if (window.history.replaceState) {window.history.replaceState(null, null, window.location.href);}</script>
+    </body>
+</html>
+{{end}}
